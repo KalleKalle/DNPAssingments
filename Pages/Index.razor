@@ -1,0 +1,52 @@
+﻿@page "/"
+@using DNP_Assignment_1.Models
+@using Models
+@using DNP_Assignment_1.Data
+@inject IUserService UserService;
+@inject NavigationManager NavigationManager
+<h1>Hello and welcome</h1>
+
+<AuthorizeView>
+    <Authorized>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/4/40/Family_jump.jpg" alt="Family" width="1000"/>
+    </Authorized>
+    <NotAuthorized>
+        <h3>Register User</h3>
+        <EditForm Context="Auth" Model="@newUser" OnValidSubmit="@AddNewUser">
+            <DataAnnotationsValidator/>
+            <ValidationSummary/>
+
+
+            <div class="form-group">
+                Username:<br/>
+                <InputText @bind-Value="newUser.UserName"/>
+            </div>
+
+            <div class="form-group">
+                Password:<br/>
+                <InputText @bind-Value="newUser.Password"/>
+            </div>
+
+            <p class="actions">
+                <button class="btn btn-outline-dark" type="submit">Register</button>
+            </p>
+        </EditForm>
+    </NotAuthorized>
+</AuthorizeView>
+    
+@code {
+    
+    private User newUser = new User();
+    
+
+    private void AddNewUser()
+    {
+        newUser.Role = "NewUser";
+        newUser.SecurityLevel = "1";
+        UserService.addUser(newUser);
+        NavigationManager.NavigateTo("/Adults");
+        newUser = new User();
+    }
+
+ 
+}

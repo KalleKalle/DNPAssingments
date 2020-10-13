@@ -1,0 +1,44 @@
+[
+  {
+    "UserName": "Ling",
+    "Password": "1234",
+    "Role": "NewUser",
+    "SecurityLevel": "1"
+  },
+  {
+    "UserName": "Kasper",
+    "Password": "1234",
+    "Role": "FamilyMember",
+    "SecurityLevel": "2"
+  },
+  {
+    "UserName": "Chris",
+    "Password": "1234",
+    "Role": "Admin",
+    "SecurityLevel": "3"
+  },
+  {
+    "UserName": "Morten",
+    "Password": "12345",
+    "Role": "NewUser",
+    "SecurityLevel": "1"
+  },
+  {
+    "UserName": "Kevin",
+    "Password": "12345",
+    "Role": "Admin",
+    "SecurityLevel": "3"
+  },
+  {
+    "UserName": "Lars",
+    "Password": "111",
+    "Role": "NewUser",
+    "SecurityLevel": "1"
+  },
+  {
+    "UserName": "Mars",
+    "Password": "222",
+    "Role": "NewUser",
+    "SecurityLevel": "1"
+  }
+]

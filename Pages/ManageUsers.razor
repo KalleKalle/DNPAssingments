@@ -1,0 +1,51 @@
+﻿@page "/ManageUsers"
+@attribute [Authorize(Policy = "MustBeAdmin")]
+@using DNP_Assignment_1.Data
+@using DNP_Assignment_1.Models
+@using Models
+@inject IUserService UserService
+<h1>ManageUsers</h1>
+@if (allUsers == null) {
+    <p>
+        <em>Loading...</em>
+    </p>
+} else if (!allUsers.Any()) {
+    <p>
+        <em>No ToDo items exist. Please add some.</em>
+    </p>
+} else {
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Username</th>
+            <th>Role</th>
+            <th>SecurityLevel</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (User user in allUsers) {
+            <tr>
+                <td>@user.UserName</td>
+                <td><EditForm Model="@user">
+                    <DataAnnotationsValidator/>
+                    <ValidationSummary/><InputText @bind-Value="user.Role"/></EditForm></td>
+                <td><EditForm Model="@user">
+                    <DataAnnotationsValidator/>
+                    <ValidationSummary/><InputText @bind-Value="user.SecurityLevel"/></EditForm></td>
+            </tr>
+        }
+        </tbody>
+    </table>
+    <button @onclick="@(() => UserService.editUser())">
+        <i class="oi oi-check" style="color:red"/>
+    </button>
+}
+
+
+@code {
+    private IList<User> allUsers;
+    protected override async Task OnInitializedAsync() {
+        allUsers = UserService.getUsers();
+    }
+    
+}

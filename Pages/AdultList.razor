@@ -1,0 +1,121 @@
+﻿@page "/Adults"
+@using DNP_Assignment_1.Data
+@using global::Models
+@inject IAdultService AdultService;
+
+<h3>List of Adults</h3>
+<p>
+    Filter by User Age: <input type="number" @oninput="@((arg) => FilterByAge(arg))" style="width:50px"/>
+</p>
+<p>
+    Filter by completed status:
+<!-- <select class="form-control selectpicker" onchange="((arg) => FilterByCompletedStatus(arg))" style="width:100px">
+    <option>Both</option>
+    <option>False</option>
+    <option>True</option>
+</select>
+-->
+</p>
+@if (adultsToShow == null) {
+    <p>
+        <em>Loading...</em>
+    </p>
+} else if (!adultsToShow.Any()) {
+    <p>
+        <em>No ToDo items exist. Please add some.</em>
+    </p>
+} else {
+    <table class="table">
+        <thead>
+        <tr>
+            <th>User ID</th>
+            <th>Jobtitle</th>
+            <th>First name</th>
+            <th>Last name</th>
+            <th>Hair Color</th>
+            <th>Eye color</th>
+            <th>Age</th>
+            <th>Weight</th>
+            <th>Height</th>            
+            <th>Sex</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (Adult adult in adultsToShow) {
+            <tr>
+                <td>@adult.Id</td>
+                <td>@adult.JobTitle</td>
+                <td>@adult.FirstName</td>
+                <td>@adult.LastName</td>
+                <td>@adult.HairColor</td>
+                <td>@adult.EyeColor</td>
+                <td>@adult.Age</td>
+                <td>@adult.Weight</td>
+                <td>@adult.Height</td>
+                <td>@adult.Sex</td>
+                <AuthorizeView Policy="MustBeAdmin">
+                <td>
+                    <button @onclick="@(() => AdultService.removeAdult(adult))">
+                        <i class="oi oi-trash" style="color:red"/>
+                    </button>
+                </td>
+                </AuthorizeView>
+
+                <!--
+                <td>
+                    <input type="checkbox" checked=adult.IsCompleted onchange="((arg) => CompletedChange(arg, adult))"/>
+                </td>
+                -->
+                
+        <!-- <td>
+            <button onclick="(() => RemoveTodo(adult.Id))">
+                <i class="oi oi-trash" style="color:red"/>
+            </button>
+        </td>
+        -->
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
+@code {
+
+    private IList<Adult> adultsToShow;
+    private IList<Adult> allAdults;
+
+    private int? filterByAge;
+    
+
+    private void FilterByAge(ChangeEventArgs changeEventArgs)
+    {
+        filterByAge = null;
+        try
+        {
+            filterByAge = int.Parse(changeEventArgs.Value.ToString());
+        }
+        catch (Exception e)
+        {
+            adultsToShow = allAdults;
+        }
+        
+        if (filterByAge != null)
+        {
+            ExecuteAdultFilter();
+        }
+
+    }
+    
+    private void ExecuteAdultFilter()
+    {
+        adultsToShow = allAdults.Where(t => filterByAge != null && t.Age == filterByAge || filterByAge == null).ToList();
+    }
+
+    protected override async Task OnInitializedAsync() {
+        allAdults = AdultService.getAdults();
+        adultsToShow = allAdults;
+    }
+    
+
+}
